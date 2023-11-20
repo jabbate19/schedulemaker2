@@ -3,16 +3,18 @@ name: Tests
 on:
   workflow_dispatch: ~
   push:
-    branches: [ master ]
+    branches: [ master, dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, dev ]
 
 env:
   CARGO_TERM_COLOR: always
 
-steps:
-  - name: Upload coverage reports to Codecov
-    uses: codecov/codecov-action@v3
-    env:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+jobs:
+  codecov:
+    steps:
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
