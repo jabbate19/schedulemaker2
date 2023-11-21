@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
-  var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  var ip = req.headers['X-Forwarded-For'] || req.socket.remoteAddress;
   // Log an info message for each incoming request
   res.on('finish', function() {
     logger.info(`${req.method} ${req.url} | ${res.statusCode} | ${ip}`);
