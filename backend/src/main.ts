@@ -1,9 +1,13 @@
 import express from "express";
-import logger from "./logger"
-import { helloWorld } from "./handlers";
+import config from './config';
+import logger from "./logger";
+import { generate } from "./handlers";
 
 const app = express();
-const port = parseInt(Bun.env.PORT) || 8080;;
+const router = express.Router();
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
   var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -14,15 +18,18 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", helloWorld);
+app.use("/api", router);
+
+router.use("/generate", generate);
 
 app.use((err, req, res, next) => {
   // Log the error message at the error level
   logger.error(`${req.method} ${req.url} | ${err.message}`);
+  logger.error(JSON.stringify(req.body, null, 2));
   res.status(500).send();
 });
 
-app.listen(port, () => {
-  logger.info(`Listening on port ${port}...`);
+app.listen(config.PORT, () => {
+  logger.info(`Listening on port ${config.PORT}...`);
 });
 

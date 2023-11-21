@@ -1,6 +1,6 @@
-import { helloWorld } from "./helloworld";
+import generate from "./generate";
 
 export {
-    helloWorld
+    generate
 };
 
